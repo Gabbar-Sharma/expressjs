@@ -1,15 +1,5 @@
-import express from 'express'
+import mongoose from "mongoose";
 
-const app = express()
-
-app.get('/', (req, res) => {
-  res.send('Hello World')
-})
-app.get('/about', (req, res) => {
-  res.send('About Us')
-})
-
-
-app.listen(3000, () => {
-  console.log('Server is running on localhost')
-})
+mongoose.connect("mongodb://127.0.0.1:27017/travelApp")
+  .then(() => console.log("MongoDB Connected ✅"))
+  .catch((err) => console.log(err));
