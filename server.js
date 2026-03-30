@@ -16,7 +16,9 @@ mongoose.connect("mongodb://127.0.0.1:27017/travelApp")
 app.get("/", (req, res) => {
   res.send("API chal rahi hai 🚀");
 });
-
+app.get("/about", (req, res) => {
+  res.send("API chal rahi hai bhai🚀");
+});
 
 app.post("/register", async (req, res) => {
   try {
