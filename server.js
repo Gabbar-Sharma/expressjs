@@ -2,7 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import User from "./models/User.js";
 
-
+import express from "express";
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const app = express();
 app.use(express.json());
@@ -12,35 +15,74 @@ mongoose.connect("mongodb://127.0.0.1:27017/travelApp")
   .then(() => console.log("MongoDB Connected ✅"))
   .catch((err) => console.log(err));
 
-// Test route
-app.get("/", (req, res) => {
-  res.send("API chal rahi hai 🚀");
-});
-app.get("/about", (req, res) => {
-  res.send("API chal rahi hai bhai🚀");
+// Schema
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  password: String
 });
 
+const User = mongoose.model("User", userSchema);
+
+// REGISTER
 app.post("/register", async (req, res) => {
-  try {
-    const user = new User(req.body);
-    await user.save();
-    res.json({ message: "User saved ✅", user });
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  const { name, email, password } = req.body;
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const user = new User({
+    name,
+    email,
+    password: hashedPassword
+  });
+
+  await user.save();
+
+  res.json({ message: "User Registered ✅" });
 });
 
+// LOGIN
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
 
-app.post("/register", async (req, res) => {
-  try {
-    const user = new User(req.body);
-    await user.save();
-    res.json({ message: "User saved ✅", user });
-  } catch (err) {
-    res.status(500).json(err);
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.json({ message: "User not found ❌" });
   }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    return res.json({ message: "Wrong password ❌" });
+  }
+
+  const token = jwt.sign({ userId: user._id }, "secret123");
+
+  res.json({ message: "Login success ✅", token });
+});
+
+// PROTECTED ROUTE
+const auth = (req, res, next) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.json({ message: "No token ❌" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, "secret123");
+    req.user = decoded;
+    next();
+  } catch {
+    res.json({ message: "Invalid token ❌" });
+  }
+};
+
+app.get("/profile", auth, (req, res) => {
+  res.json({ message: "Protected data 🔐", user: req.user });
 });
 
 app.listen(3000, () => {
-  console.log("Server running on port 3000");
+  console.log("Server running 🚀");
 });
