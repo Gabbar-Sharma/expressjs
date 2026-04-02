@@ -19,6 +19,9 @@ app.get("/contact" , (req ,res) =>{
 app.get("/users" , (req ,res) =>{
   res.send("This is the users page");
 })
+app.post("/users" , (req ,res) =>{
+  res.send("User created");
+} )
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
