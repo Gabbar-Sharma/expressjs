@@ -22,7 +22,9 @@ app.get("/users" , (req ,res) =>{
 app.post("/users" , (req ,res) =>{
   res.send("User created");
 } )
-
+get.put("/users/:id" , (req ,res) =>{
+  res.send("User updated");
+})
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });
