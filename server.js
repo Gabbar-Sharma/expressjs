@@ -25,6 +25,11 @@ app.post("/users" , (req ,res) =>{
 get.put("/users/:id" , (req ,res) =>{
   res.send("User updated");
 })
+app.delete("/users/:id" , (req ,res) =>{
+  res.send("User deleted");
+})
+
+
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });
