@@ -16,6 +16,9 @@ app.get("/about" , (req ,res) => {
 app.get("/contact" , (req ,res) =>{
   res.send("This is the contact page");
 })
+app.get("/users" , (req ,res) =>{
+  res.send("This is the users page");
+})
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
