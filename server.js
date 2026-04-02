@@ -28,6 +28,9 @@ get.put("/users/:id" , (req ,res) =>{
 app.delete("/users/:id" , (req ,res) =>{
   res.send("User deleted");
 })
+app.read("/users/:id" , (req ,res) =>{
+  res.send("User details");
+})
 
 
 app.listen(process.env.PORT, () => {
