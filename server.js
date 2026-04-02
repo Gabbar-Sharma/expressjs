@@ -1,8 +1,9 @@
-import express from "express";
-import mongoose from "mongoose";
+const express = require("express");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
 const app = express();
-const PORT = 3000;
+
 
 app.get("/", (req, res) => {
   res.send("Hello, World! , server runing on port 3000");
@@ -16,6 +17,6 @@ app.get("/contact" , (req ,res) =>{
   res.send("This is the contact page");
 })
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server running on port ${process.env.PORT}`);
 });
